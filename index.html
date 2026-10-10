@@ -60,6 +60,11 @@ canvas{display:block;width:100%;height:300px}
 <input id="temp" type="range" min="15" max="45" value="30">
 </div>
 <button id="reset" class="alt">↺ Boshlang‘ich holat</button>
+<button id="animateDrying">🏜️ Orolning qurishini ko‘rsatish</button>
+<button id="stopAnimation" class="alt">⏸ To‘xtatish</button>
+<button id="animateDrying">🏜️ Orolning qurishini ko‘rsatish</button>
+<button id="stopAnimation" class="alt">⏸ To‘xtatish</button>
+
 </div>
 
 <div>
@@ -251,6 +256,45 @@ function draw(){
  });
 }
 
+let dryingTimer = null;
+
+$('animateDrying').onclick = () => {
+  if (dryingTimer) clearInterval(dryingTimer);
+
+  $('water').value = 100;
+  $('salt').value = 20;
+  $('temp').value = 30;
+  calculate();
+
+  let step = 0;
+
+  dryingTimer = setInterval(() => {
+    step++;
+
+    $('water').value = Math.max(10, 100 - step * 9);
+    $('salt').value = Math.min(90, 20 + step * 7);
+    $('temp').value = Math.min(40, 30 + step);
+
+    calculate();
+
+    if (step >= 10) {
+      clearInterval(dryingTimer);
+      dryingTimer = null;
+      $('status').textContent =
+        '🏜️ Animatsiya tugadi! Suv kamayishi va sho‘rlanishning ekotizimga ta’sirini kuzating.';
+    }
+  }, 1000);
+};
+
+$('stopAnimation').onclick = () => {
+  if (dryingTimer) {
+    clearInterval(dryingTimer);
+    dryingTimer = null;
+  }
+
+  $('status').textContent =
+    '⏸ Animatsiya to‘xtatildi. Tajribani davom ettirishingiz mumkin.';
+};
 ['water','salt','temp'].forEach(id=>{
  $(id).addEventListener('input',calculate);
 });
