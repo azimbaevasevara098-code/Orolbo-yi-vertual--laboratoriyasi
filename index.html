@@ -2,331 +2,646 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Orolbo‘yi virtual ekologik laboratoriyasi</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#eef6f7;color:#17323d}
-header{background:linear-gradient(135deg,#075b73,#11a0a0);color:white;padding:24px 14px;text-align:center}
-header h1{font-size:clamp(23px,5vw,34px);margin:0 0 10px}
-main{max-width:1050px;margin:auto;padding:15px}
-.card{background:white;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 4px 18px #17323d15}
-h2{font-size:20px;margin-top:0}
-.layout{display:grid;grid-template-columns:300px 1fr;gap:16px}
-@media(max-width:750px){.layout{grid-template-columns:1fr}}
-.control{margin:20px 0}
-label{display:flex;justify-content:space-between;gap:8px;font-weight:bold;margin-bottom:10px}
-input[type=range]{width:100%;accent-color:#087f87}
-.value{color:#087f87}
-button{border:0;border-radius:10px;padding:12px 15px;background:#087f87;color:white;font-weight:bold;margin:5px 4px 5px 0}
-button.alt{background:#e7f0f1;color:#17323d}
-.scene{border-radius:14px;overflow:hidden;background:#dff4fa}
-.scene svg{display:block;width:100%;height:auto}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.stat{padding:12px;border-radius:12px;background:#f1f7f7}
-.stat small{color:#60777d}
-.num{font-size:25px;font-weight:bold;margin:6px 0}
-.track{height:9px;background:#d9e5e6;border-radius:20px;overflow:hidden}
-.fill{height:100%;background:#37845c;transition:width .3s}
-.status{margin-top:13px;padding:13px;border-radius:10px;background:#fff6df;line-height:1.5}
-.note{font-size:13px;color:#61767c;line-height:1.5}
-.chart-wrap{width:100%;overflow:hidden;border:1px solid #e0ebec;border-radius:12px}
-canvas{display:block;width:100%;height:300px}
-.legend{display:flex;flex-wrap:wrap;gap:12px;margin:12px 0;font-size:13px}
-.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px}
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef5f7;
+    color: #17324d;
+}
+
+header {
+    background: linear-gradient(135deg, #075985, #0891b2);
+    color: white;
+    text-align: center;
+    padding: 30px 15px;
+}
+
+header h1 {
+    margin: 0 0 12px;
+    font-size: 28px;
+}
+
+header p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+nav {
+    background: #063b55;
+    padding: 12px;
+    text-align: center;
+}
+
+nav a {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    margin: 6px 12px;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 14px #0000000d;
+}
+
+h2 {
+    color: #087e8b;
+    margin-top: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.stat {
+    background: #e0f2fe;
+    padding: 18px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.stat h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+}
+
+.value {
+    font-size: 27px;
+    font-weight: bold;
+    color: #0369a1;
+}
+
+label {
+    display: block;
+    margin-top: 18px;
+    font-weight: bold;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 12px;
+    accent-color: #0891b2;
+}
+
+select, button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+select {
+    width: 100%;
+    margin-top: 8px;
+    background: #f0f9ff;
+}
+
+button {
+    background: #0891b2;
+    color: white;
+    cursor: pointer;
+    margin: 10px 5px 0 0;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #0e7490;
+}
+
+.reset {
+    background: #64748b;
+}
+
+.sea-box {
+    height: 220px;
+    background: #e0f2fe;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid #bae6fd;
+}
+
+.sea {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    background: linear-gradient(#38bdf8, #0369a1);
+    transition: height 0.5s;
+}
+
+.sea::before {
+    content: "OROL DENGIZI";
+    position: absolute;
+    width: 100%;
+    top: 40%;
+    text-align: center;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.sea-status {
+    margin-top: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.result {
+    padding: 16px;
+    border-radius: 10px;
+    background: #ecfdf5;
+    border-left: 5px solid #10b981;
+    line-height: 1.7;
+}
+
+.warning {
+    background: #fff7ed;
+    border-left-color: #f97316;
+}
+
+canvas {
+    width: 100%;
+    max-height: 300px;
+}
+
+footer {
+    background: #063b55;
+    color: white;
+    text-align: center;
+    padding: 22px;
+    line-height: 1.6;
+}
+
+.small {
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+@media(max-width:600px) {
+    header h1 {
+        font-size: 23px;
+    }
+
+    .container {
+        padding: 12px;
+    }
+
+    .card {
+        padding: 16px;
+    }
+}
 </style>
 </head>
+
 <body>
+
 <header>
-<h1>🌍 Orolbo‘yi virtual ekologik laboratoriyasi</h1>
-<p>Suv, tuproq sho‘rlanishi va haroratning ekotizimga ta’sirini o‘rganing</p>
+    <h1>🌊 Orolbo‘yi virtual ekologik laboratoriyasi</h1>
+    <p>Biologiya fanini o‘qitishda raqamli texnologiyalar va virtual laboratoriyalar</p>
+    <p>Orolbo‘yi ekotizimlarini modellashtirish va ekologik tahlil</p>
 </header>
 
-<main>
-<div class="card">
-<h2>🔬 1. Tajriba parametrlarini boshqaring</h2>
-<div class="layout">
-<div>
-<div class="control">
-<label for="water">Suv mavjudligi <span class="value" id="wv">100%</span></label>
-<input id="water" type="range" min="10" max="100" value="100">
-</div>
-<div class="control">
-<label for="salt">Tuproq sho‘rlanishi <span class="value" id="sv">20%</span></label>
-<input id="salt" type="range" min="0" max="100" value="20">
-</div>
-<div class="control">
-<label for="temp">Harorat <span class="value" id="tv">30°C</span></label>
-<input id="temp" type="range" min="15" max="45" value="30">
-</div>
-<button id="reset" class="alt">↺ Boshlang‘ich holat</button>
-<button id="animateDrying">🏜️ Orolning qurishini ko‘rsatish</button>
-<button id="stopAnimation" class="alt">⏸ To‘xtatish</button>
+<nav>
+    <a href="#laboratoriya">Laboratoriya</a>
+    <a href="#tajriba">Tajriba</a>
+    <a href="#natija">Natijalar</a>
+    <a href="#xulosa">Xulosa</a>
+</nav>
 
-</div>
+<main class="container">
 
-<div>
-<div class="scene">
-<svg viewBox="0 0 700 300" role="img" aria-label="Orolbo‘yi ekotizimi modeli">
-<rect width="700" height="300" fill="#dff4fa"/>
-<circle cx="610" cy="45" r="25" fill="#f5cf65"/>
-<path d="M0 120 Q150 95 300 125 T700 110 L700 300 L0 300Z" fill="#e8d29f"/>
-<path id="waterArea" d="M0 170 Q150 150 300 175 T510 170 L510 260 L0 260Z" fill="#37a8cc"/>
-<path d="M0 260 Q250 245 510 260 T700 270 L700 300 L0 300Z" fill="#c9a56b"/>
-<g id="plants" fill="#3f835a">
-<path d="M520 270l-8-100 16 55 17-70 0 115z"/>
-<path d="M580 275l-5-80 14 42 15-58 0 96z"/>
-<path d="M650 275l-7-105 15 58 16-73 0 120z"/>
-</g>
-<g id="birds" fill="#203e49">
-<path d="M500 75q17-18 34 0q17-18 34 0q-17-8-34 7q-17-15-34-7z"/>
-<path d="M560 100q12-13 24 0q12-13 24 0q-12-6-24 5q-12-11-24-5z"/>
-</g>
-<g id="fish" fill="#1d718b">
-<path d="M100 210q22-20 45 0q-23 20-45 0zm-13 0l-15-13v26z"/>
-<path d="M220 230q20-17 39 0q-19 17-39 0zm-12 0l-14-11v22z"/>
-</g>
-<text x="15" y="28" font-size="16" font-weight="bold" fill="#17323d">Soddalashtirilgan ekotizim modeli</text>
-</svg>
-</div>
+<section class="card">
+    <h2>🌍 1. Orolbo‘yi ekotizimi</h2>
 
-<div class="stats">
-<div class="stat"><small>🌱 O‘simliklar holati</small><div class="num" id="plant">0%</div><div class="track"><div class="fill" id="plantBar"></div></div></div>
-<div class="stat"><small>🐦 Hayvonlar yashash muhiti</small><div class="num" id="animal">0%</div><div class="track"><div class="fill" id="animalBar"></div></div></div>
-<div class="stat"><small>🌍 Ekologik barqarorlik</small><div class="num" id="eco">0%</div><div class="track"><div class="fill" id="ecoBar"></div></div></div>
-<div class="stat"><small>🧂 Sho‘rlanish</small><div class="num" id="saltOut">0%</div><div class="track"><div class="fill" id="saltBar"></div></div></div>
-</div>
-<div class="status" id="status">Tajriba tayyor. Slayderlarni o‘zgartiring.</div>
-</div>
-</div>
-</div>
+    <p>
+        Orol dengizining qurishi mintaqaning tabiiy muhitiga,
+        tuproq sho‘rlanishiga, o‘simliklar qoplamiga va
+        biologik xilma-xillikka ta’sir ko‘rsatadi.
+        Ushbu laboratoriya ekologik omillarni interaktiv
+        tarzda o‘rganish uchun mo‘ljallangan.
+    </p>
 
-<div class="card">
-<h2>📈 2. Jonli ekologik grafik</h2>
-<p class="note">Slayderlarni o‘zgartiring. Grafik natijalardagi o‘zgarishlarni ko‘rsatadi.</p>
-<div class="chart-wrap"><canvas id="chart"></canvas></div>
-<div class="legend">
-<span><i class="dot" style="background:#37845c"></i>O‘simliklar</span>
-<span><i class="dot" style="background:#087f87"></i>Hayvonlar</span>
-<span><i class="dot" style="background:#c28b27"></i>Barqarorlik</span>
-</div>
-<p class="note" id="chartStatus">Grafik boshlang‘ich holatni ko‘rsatmoqda.</p>
-<button id="clearHistory" class="alt">Grafik tarixini tozalash</button>
-<p class="note">Eslatma: foizlar o‘quv maqsadidagi shartli model natijalaridir, real ekologik monitoring ma’lumotlari emas.</p>
-</div>
+    <p class="small">
+        Eslatma: quyidagi qiymatlar o‘quv modellashtirish
+        uchun mo‘ljallangan. Ular real vaqt o‘lchovlari emas.
+    </p>
+</section>
 
-<div class="card">
-<h2>🧑‍🔬 3. O‘quvchi topshirig‘i</h2>
-<ol>
-<li>Boshlang‘ich natijalarni kuzating.</li>
-<li>Suvni 50% gacha kamaytiring.</li>
-<li>Sho‘rlanishni 70% ga oshiring.</li>
-<li>Haroratni 40°C ga o‘rnating.</li>
-<li>Ekotizimdagi o‘zgarishlarni tushuntiring.</li>
-</ol>
-<button id="check">Natijani baholash</button>
-<p id="score"></p>
-</div>
+<section class="card" id="laboratoriya">
+    <h2>🧪 2. Virtual tajriba boshqaruvi</h2>
+
+    <label for="water">
+        💧 Suv sathi: <span id="waterText">70</span>%
+    </label>
+    <input type="range" id="water" min="0" max="100" value="70">
+
+    <label for="salt">
+        🧂 Sho‘rlanish darajasi: <span id="saltText">30</span>%
+    </label>
+    <input type="range" id="salt" min="0" max="100" value="30">
+
+    <label for="temperature">
+        🌡️ Harorat: <span id="tempText">25</span> °C
+    </label>
+    <input type="range" id="temperature" min="0" max="50" value="25">
+
+    <label for="plants">🌱 O‘simliklar holati</label>
+    <select id="plants">
+        <option value="good">Yaxshi rivojlangan</option>
+        <option value="medium">O‘rtacha rivojlangan</option>
+        <option value="poor">Siyrak va zaif</option>
+    </select>
+
+    <br>
+
+    <button id="runButton">▶ Tajribani boshlash</button>
+    <button class="reset" id="resetButton">↻ Qayta tiklash</button>
+</section>
+
+<section class="card">
+    <h2>🌊 3. Orol dengizining vizual modeli</h2>
+
+    <div class="sea-box">
+        <div class="sea" id="sea"></div>
+    </div>
+
+    <div class="sea-status" id="seaStatus">
+        Suv sathi: o‘rtacha
+    </div>
+</section>
+
+<section class="card">
+    <h2>📊 4. Ekologik ko‘rsatkichlar</h2>
+
+    <div class="grid">
+        <div class="stat">
+            <h3>💧 Suv sathi</h3>
+            <div class="value" id="waterValue">70%</div>
+        </div>
+
+        <div class="stat">
+            <h3>🧂 Sho‘rlanish</h3>
+            <div class="value" id="saltValue">30%</div>
+        </div>
+
+        <div class="stat">
+            <h3>🌡️ Harorat</h3>
+            <div class="value" id="tempValue">25 °C</div>
+        </div>
+
+        <div class="stat">
+            <h3>🌿 Ekotizim holati</h3>
+            <div class="value" id="ecoValue">Yaxshi</div>
+        </div>
+    </div>
+</section>
+
+<section class="card" id="natija">
+    <h2>📈 5. Ko‘rsatkichlar grafigi</h2>
+
+    <canvas id="chart" width="600" height="280"
+        aria-label="Ekologik ko‘rsatkichlar grafigi">
+    </canvas>
+
+    <p class="small">
+        Grafik suv sathi, sho‘rlanish va harorat qiymatlarini
+        taqqoslash uchun xizmat qiladi. Qiymatlar o‘quv
+        modeli doirasida normallashtirib ko‘rsatiladi.
+    </p>
+</section>
+
+<section class="card">
+    <h2>🔬 6. Tajriba natijalarining tahlili</h2>
+
+    <div class="result" id="analysis">
+        Ko‘rsatkichlarni o‘zgartiring va «Tajribani boshlash»
+        tugmasini bosing. Natijalar shu yerda aks etadi.
+    </div>
+</section>
+
+<section class="card" id="xulosa">
+    <h2>📝 7. Nazorat savollari</h2>
+
+    <p><b>1.</b> Suv sathining pasayishi ekotizimga qanday ta’sir qiladi?</p>
+    <p><b>2.</b> Tuproq va suv sho‘rlanishi o‘simliklarga qanday ta’sir ko‘rsatadi?</p>
+    <p><b>3.</b> Harorat ortishi suv bug‘lanishiga qanday ta’sir qiladi?</p>
+    <p><b>4.</b> Orolbo‘yi ekotizimini muhofaza qilish uchun qanday choralar zarur?</p>
+
+    <label for="answer">Javobingizni yozing:</label>
+    <textarea id="answer" rows="4"
+        style="width:100%;margin-top:10px;padding:12px;border:1px solid #cbd5e1;border-radius:8px;"
+        placeholder="Javobingizni shu yerga yozing..."></textarea>
+
+    <br>
+    <button id="saveButton">💾 Javobni saqlash</button>
+    <button id="showButton">📖 Saqlangan javobni ko‘rish</button>
+
+    <div id="savedAnswer" class="result" style="display:none;margin-top:15px;"></div>
+</section>
+
 </main>
 
+<footer>
+    <b>Orolbo‘yi virtual ekologik laboratoriyasi</b>
+    <br>
+    Biologiya ta’limida raqamli texnologiyalar
+    <br>
+    <span>Tabiatni o‘rganamiz va uni asraymiz! 🌿</span>
+</footer>
+
 <script>
-(function(){
-const $=id=>document.getElementById(id);
-const history=[];
-let lastState='';
-const chart=$('chart');
+const water = document.getElementById("water");
+const salt = document.getElementById("salt");
+const temperature = document.getElementById("temperature");
+const plants = document.getElementById("plants");
 
-function calculate(){
- const w=+$('water').value;
- const s=+$('salt').value;
- const t=+$('temp').value;
+const chart = document.getElementById("chart");
+const ctx = chart.getContext("2d");
 
- $('wv').textContent=w+'%';
- $('sv').textContent=s+'%';
- $('tv').textContent=t+'°C';
+function calculate() {
+    const w = Number(water.value);
+    const s = Number(salt.value);
+    const t = Number(temperature.value);
 
- const heat=Math.max(0,t-30);
- const plant=Math.round(Math.max(4,Math.min(100,25+w*.62-s*.32-heat*1.4)));
- const animal=Math.round(Math.max(4,Math.min(100,18+w*.70-s*.18-heat*1.8)));
- const eco=Math.round(Math.max(4,Math.min(100,plant*.48+animal*.37+(100-s)*.15)));
+    const plantScores = {
+        good: 100,
+        medium: 60,
+        poor: 25
+    };
 
- $('plant').textContent=plant+'%';
- $('animal').textContent=animal+'%';
- $('eco').textContent=eco+'%';
- $('saltOut').textContent=s+'%';
+    const plantScore = plantScores[plants.value];
 
- $('plantBar').style.width=plant+'%';
- $('animalBar').style.width=animal+'%';
- $('ecoBar').style.width=eco+'%';
- $('saltBar').style.width=s+'%';
+    const ecoScore = Math.round(
+        w * 0.4 +
+        (100 - s) * 0.3 +
+        (100 - Math.abs(t - 22) * 2) * 0.15 +
+        plantScore * 0.15
+    );
 
- $('plants').style.opacity=Math.max(.12,plant/100);
- $('birds').style.opacity=Math.max(.12,animal/100);
- $('fish').style.opacity=Math.max(.08,Math.min(1,w/100));
-
- const y=245-w*.72;
- $('waterArea').setAttribute('d',
- `M0 ${y} Q130 ${y-18} 260 ${y+5} T510 ${y} L510 260 Q260 245 0 260Z`);
-
- let msg=w<40?'⚠️ Suv juda kam: yashash muhiti keskin qisqardi.':
- w<70?'💧 Suv kamaydi: organizmlar uchun sharoit yomonlashdi.':
- '🌊 Suv miqdori nisbatan yuqori.';
-
- if(s>65)msg+=' 🧂 Sho‘rlanish yuqori.';
- if(t>37)msg+=' 🌡️ Harorat yuqori, suv bug‘lanishi kuchayishi mumkin.';
-
- $('status').textContent=msg+
- ` O‘simliklar: ${plant}%, hayvonlar: ${animal}%, barqarorlik: ${eco}%.`;
-
- const state=`${w}-${s}-${t}`;
- if(state!==lastState){
-  history.push({plant,animal,eco});
-  if(history.length>30)history.shift();
-  lastState=state;
- }
-
- draw();
- $('chartStatus').textContent='Tajriba nuqtalari: '+history.length+
- ' ta | Suv '+w+'% | Sho‘rlanish '+s+'% | Harorat '+t+'°C';
+    return {
+        w,
+        s,
+        t,
+        plantScore,
+        ecoScore: Math.max(0, Math.min(100, ecoScore))
+    };
 }
 
-function draw(){
- const dpr=window.devicePixelRatio||1;
- const width=Math.max(280,chart.clientWidth||700);
- const height=300;
- chart.width=width*dpr;
- chart.height=height*dpr;
- const ctx=chart.getContext('2d');
- ctx.setTransform(dpr,0,0,dpr,0,0);
+function drawChart(data) {
+    const width = chart.width;
+    const height = chart.height;
 
- const left=42,right=14,top=25,bottom=32;
- const plotW=width-left-right;
- const plotH=height-top-bottom;
+    ctx.clearRect(0, 0, width, height);
 
- ctx.clearRect(0,0,width,height);
- ctx.font='12px Arial';
- ctx.lineWidth=1;
- ctx.strokeStyle='#dbe7e8';
- ctx.fillStyle='#60777d';
+    const values = [
+        data.w,
+        data.s,
+        data.t * 2
+    ];
 
- for(let i=0;i<=5;i++){
-  const val=100-i*20;
-  const y=top+plotH*i/5;
-  ctx.beginPath();
-  ctx.moveTo(left,y);
-  ctx.lineTo(width-right,y);
-  ctx.stroke();
-  ctx.fillText(String(val),8,y+4);
- }
+    const labels = [
+        "Suv sathi",
+        "Sho‘rlanish",
+        "Harorat × 2"
+    ];
 
- if(history.length===0)return;
+    const barColors = [
+        "#0284c7",
+        "#ea580c",
+        "#16a34a"
+    ];
 
- const series=[
-  ['plant','#37845c'],
-  ['animal','#087f87'],
-  ['eco','#c28b27']
- ];
+    ctx.font = "14px Arial";
+    ctx.fillStyle = "#17324d";
 
- series.forEach(([key,color])=>{
-  ctx.beginPath();
+    const baseY = 220;
+    const maxBarHeight = 155;
+    const barWidth = 90;
+    const gap = 85;
+    const startX = 65;
 
-  history.forEach((p,i)=>{
-   const x=history.length===1?left+plotW/2:
-    left+i*plotW/Math.max(1,history.length-1);
-   const y=top+plotH-(p[key]/100)*plotH;
-   if(i===0)ctx.moveTo(x,y);
-   else ctx.lineTo(x,y);
-  });
+    ctx.beginPath();
+    ctx.moveTo(30, baseY);
+    ctx.lineTo(width - 25, baseY);
+    ctx.strokeStyle = "#94a3b8";
+    ctx.stroke();
 
-  ctx.strokeStyle=color;
-  ctx.lineWidth=2.8;
-  ctx.stroke();
+    values.forEach((value, i) => {
+        const x = startX + i * (barWidth + gap);
+        const barHeight = Math.max(
+            0,
+            Math.min(100, value)
+        ) / 100 * maxBarHeight;
 
-  history.forEach((p,i)=>{
-   const x=history.length===1?left+plotW/2:
-    left+i*plotW/Math.max(1,history.length-1);
-   const y=top+plotH-(p[key]/100)*plotH;
-   ctx.beginPath();
-   ctx.arc(x,y,3,0,Math.PI*2);
-   ctx.fillStyle=color;
-   ctx.fill();
-  });
- });
+        ctx.fillStyle = barColors[i];
+        ctx.fillRect(
+            x,
+            baseY - barHeight,
+            barWidth,
+            barHeight
+        );
+
+        ctx.fillStyle = "#17324d";
+        ctx.textAlign = "center";
+        ctx.fillText(
+            value + "%",
+            x + barWidth / 2,
+            baseY - barHeight - 10
+        );
+
+        ctx.fillText(
+            labels[i],
+            x + barWidth / 2,
+            baseY + 22
+        );
+    });
 }
 
-let dryingTimer = null;
+function updateLab() {
+    const d = calculate();
 
-$('animateDrying').onclick = () => {
-  if (dryingTimer) clearInterval(dryingTimer);
+    document.getElementById("waterText").textContent = d.w;
+    document.getElementById("saltText").textContent = d.s;
+    document.getElementById("tempText").textContent = d.t;
 
-  $('water').value = 100;
-  $('salt').value = 20;
-  $('temp').value = 30;
-  calculate();
+    document.getElementById("waterValue").textContent = d.w + "%";
+    document.getElementById("saltValue").textContent = d.s + "%";
+    document.getElementById("tempValue").textContent = d.t + " °C";
 
-  let step = 0;
+    const sea = document.getElementById("sea");
+    sea.style.height = d.w + "%";
 
-  dryingTimer = setInterval(() => {
-    step++;
+    let seaStatus = "Suv sathi: o‘rtacha";
 
-    $('water').value = Math.max(10, 100 - step * 9);
-    $('salt').value = Math.min(90, 20 + step * 7);
-    $('temp').value = Math.min(40, 30 + step);
-
-    calculate();
-
-    if (step >= 10) {
-      clearInterval(dryingTimer);
-      dryingTimer = null;
-      $('status').textContent =
-        '🏜️ Animatsiya tugadi! Suv kamayishi va sho‘rlanishning ekotizimga ta’sirini kuzating.';
+    if (d.w < 25) {
+        seaStatus = "Suv sathi: juda past";
+    } else if (d.w < 50) {
+        seaStatus = "Suv sathi: past";
+    } else if (d.w >= 75) {
+        seaStatus = "Suv sathi: yuqori";
     }
-  }, 1000);
-};
 
-$('stopAnimation').onclick = () => {
-  if (dryingTimer) {
-    clearInterval(dryingTimer);
-    dryingTimer = null;
-  }
+    document.getElementById("seaStatus").textContent = seaStatus;
 
-  $('status').textContent =
-    '⏸ Animatsiya to‘xtatildi. Tajribani davom ettirishingiz mumkin.';
-};
-['water','salt','temp'].forEach(id=>{
- $(id).addEventListener('input',calculate);
+    let ecoText = "Yaxshi";
+
+    if (d.ecoScore < 40) {
+        ecoText = "Juda zaif";
+    } else if (d.ecoScore < 60) {
+        ecoText = "Zaif";
+    } else if (d.ecoScore < 80) {
+        ecoText = "O‘rtacha";
+    }
+
+    document.getElementById("ecoValue").textContent = ecoText;
+
+    drawChart(d);
+}
+
+function runExperiment() {
+    const d = calculate();
+
+    let messages = [];
+
+    if (d.w < 30) {
+        messages.push(
+            "Suv sathi past. Suv havzasi va unga bog‘liq yashash muhitlari qisqarishi mumkin."
+        );
+    } else {
+        messages.push(
+            "Suv sathi model bo‘yicha nisbatan yuqori."
+        );
+    }
+
+    if (d.s >= 60) {
+        messages.push(
+            "Sho‘rlanish yuqori. Chuchuk suvga moslashgan organizmlar uchun sharoit yomonlashishi mumkin."
+        );
+    } else {
+        messages.push(
+            "Sho‘rlanish ko‘rsatkichi ushbu modelda nisbatan past."
+        );
+    }
+
+    if (d.t >= 35) {
+        messages.push(
+            "Harorat yuqori. Bug‘lanish kuchayishi mumkin."
+        );
+    }
+
+    if (plants.value === "poor") {
+        messages.push(
+            "O‘simliklar siyrak. Tuproq eroziyasi va chang ko‘tarilishi xavfi ortishi mumkin."
+        );
+    } else if (plants.value === "good") {
+        messages.push(
+            "O‘simliklar yaxshi rivojlangan deb qabul qilindi."
+        );
+    } else {
+        messages.push(
+            "O‘simliklar holati o‘rtacha deb qabul qilindi."
+        );
+    }
+
+    messages.push(
+        "Modelning umumiy ekologik ko‘rsatkichi: " +
+        d.ecoScore + "/100."
+    );
+
+    document.getElementById("analysis").innerHTML =
+        messages.map(message => "• " + message).join("<br><br>");
+}
+
+document.getElementById("runButton").addEventListener(
+    "click",
+    runExperiment
+);
+
+[water, salt, temperature, plants].forEach(element => {
+    element.addEventListener("input", updateLab);
+    element.addEventListener("change", updateLab);
 });
 
-$('reset').onclick=()=>{
- $('water').value=100;
- $('salt').value=20;
- $('temp').value=30;
- history.length=0;
- lastState='';
- calculate();
-};
+document.getElementById("resetButton").addEventListener(
+    "click",
+    function() {
+        water.value = 70;
+        salt.value = 30;
+        temperature.value = 25;
+        plants.value = "good";
 
-$('clearHistory').onclick=()=>{
- history.length=0;
- lastState='';
- calculate();
-};
+        updateLab();
 
-$('check').onclick=()=>{
- const w=+$('water').value;
- const s=+$('salt').value;
- const t=+$('temp').value;
- let score=0;
- if(w<70)score++;
- if(s>65)score++;
- if(t>37)score++;
- $('score').textContent='Bajarilgan mezonlar: '+score+
- '/3. Suvni kamaytirish, sho‘rlanishni oshirish va haroratni ko‘tarish holatlarini sinab ko‘ring.';
-};
+        document.getElementById("analysis").textContent =
+            "Ko‘rsatkichlar boshlang‘ich holatga qaytarildi.";
+    }
+);
 
-window.addEventListener('resize',draw);
-calculate();
-})();
+document.getElementById("saveButton").addEventListener(
+    "click",
+    function() {
+        const answer = document.getElementById("answer").value;
+
+        try {
+            localStorage.setItem("orolLabAnswer", answer);
+
+            document.getElementById("savedAnswer").style.display = "block";
+            document.getElementById("savedAnswer").textContent =
+                answer
+                ? "Javobingiz ushbu brauzerda saqlandi."
+                : "Saqlash uchun avval javob yozing.";
+        } catch (error) {
+            alert("Javobni saqlab bo‘lmadi.");
+        }
+    }
+);
+
+document.getElementById("showButton").addEventListener(
+    "click",
+    function() {
+        let answer = "";
+
+        try {
+            answer = localStorage.getItem("orolLabAnswer") || "";
+        } catch (error) {
+            answer = "";
+        }
+
+        const box = document.getElementById("savedAnswer");
+        box.style.display = "block";
+        box.textContent = answer
+            ? "Saqlangan javob: " + answer
+            : "Hozircha saqlangan javob yo‘q.";
+    }
+);
+
+updateLab();
 </script>
+
 </body>
 </html>
